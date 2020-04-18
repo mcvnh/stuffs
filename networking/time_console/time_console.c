@@ -123,8 +123,8 @@ int main() {
     client_length,
     address_buffer,
     sizeof address_buffer,
-    0,
-    0,
+    0, // serv
+    0, // servlen
     NI_NUMERICHOST
   );
 
