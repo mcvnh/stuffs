@@ -1,0 +1,6 @@
+#!/bin/bash
+
+# Compress all OBJ files in the current folder
+# https://github.com/google/draco
+
+ls -l | find ./ -type f -name "*.obj" -exec ${DRACO_BUILD_PATH}/draco_encoder -i {} \;
