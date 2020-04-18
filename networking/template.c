@@ -33,7 +33,7 @@
 
 #define ISVALIDSOCKET(s) ((s) >= 0)
 #define CLOSESOCKET(s) close(s)
-#define GETSOCKETERRNO(s) (errno)
+#define GETSOCKETERRNO() (errno)
 
 #endif
 
