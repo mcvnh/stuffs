@@ -57,7 +57,7 @@ int main() {
 
   printf(" 1. Figure out the local address that the program should bind to.\n");
   memset(&hints, 0, sizeof(hints));
-  hints.ai_family = AF_INET;
+  hints.ai_family = AF_UNSPEC;
   hints.ai_socktype = SOCK_STREAM;
   hints.ai_flags = AI_PASSIVE;
 
