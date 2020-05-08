@@ -10,7 +10,7 @@ import SwiftUI
 
 struct FlagImage: View {
     let name: String
-    
+
     var body: some View {
         Image(name)
             .renderingMode(.original)
@@ -46,12 +46,16 @@ extension Text {
 
 struct ContentView: View {
     @State private var countries = ["Estonia", "France", "Germany", "Ireland", "Italy", "Nigeria", "Poland", "Russia", "Spain", "UK", "US"].shuffled()
-    @State private var correctAnswer = Int.random(in: 0...2)
+    @State private var correctAnswer : Int = Int.random(in: 0...2)
     
-    @State private var showingScore = false
+    @State private var showingScore : Bool = false
     @State private var wrongMessage = ""
 
     @State private var score = 0
+    
+    // animation section
+    @State private var shouldAnimatingItemIndex : Int = -1
+    
     
     var body: some View {
         ZStack {
@@ -71,10 +75,22 @@ struct ContentView: View {
 
                 ForEach(0 ..< 3) { number in
                     Button(action: {
-                        self.flagTapped(number)
+                        withAnimation {
+                            self.shouldAnimatingItemIndex = number
+                        }
+                        
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                            self.shouldAnimatingItemIndex = -1
+                            self.flagTapped(number)
+                        }
                     }) {
                         FlagImage(name: self.countries[number])
                     }
+                    .rotation3DEffect(.degrees(self.selectCorrected(number) ? 360 : 0), axis: (x: 0, y: 1, z: 0))
+                    .scaleEffect(self.selectIncorrected(number) ? 1.2 : 1)
+                    .animation(.default)
+                    .opacity(self.notSelected(number) ? 0.25 : 1.0)
+                    .animation(.easeIn)
                 }
             }
         }
@@ -85,7 +101,19 @@ struct ContentView: View {
             })
         }
     }
-    
+
+    func selectCorrected(_ number: Int) -> Bool {
+        return self.shouldAnimatingItemIndex == number && number == self.correctAnswer
+    }
+
+    func selectIncorrected(_ number: Int) -> Bool {
+        return self.shouldAnimatingItemIndex == number && number != self.correctAnswer
+    }
+
+    func notSelected(_ number: Int) -> Bool {
+        return self.shouldAnimatingItemIndex != number && self.shouldAnimatingItemIndex != -1
+    }
+
     func flagTapped(_ number: Int) {
         if number == correctAnswer {
             score += 1
@@ -95,7 +123,7 @@ struct ContentView: View {
             showingScore = true
         }
     }
-    
+
     func askQuestion() {
         countries = countries.shuffled()
         correctAnswer = Int.random(in: 0...2)
