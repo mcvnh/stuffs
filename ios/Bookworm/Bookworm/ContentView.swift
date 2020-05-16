@@ -24,10 +24,15 @@ struct ContentView: View {
                     NavigationLink(destination: DetailView(book: book)) {
                         EmojiRatingView(rating: book.rating).font(.largeTitle)
                         
-                        VStack(alignment: .leading) {
-                            Text(book.title ?? "Unknown Title").font(.headline).foregroundColor(book.rating == 1 ? .red : .black)
+                        HStack {
+                            VStack(alignment: .leading) {
+                                Text(book.title ?? "Unknown Title").font(.headline).foregroundColor(book.rating == 1 ? .red : .black)
+                                Text(book.author ?? "Unknown Author").foregroundColor(.secondary)
+                            }
                             
-                            Text(book.author ?? "Unknown Author").foregroundColor(.secondary)
+                            Spacer()
+                            
+                            Text(Self.formattedFinishedDate(on: book.date))
                         }
                     }
                 }
@@ -44,6 +49,12 @@ struct ContentView: View {
                 AddBookView().environment(\.managedObjectContext, self.moc)
             }
         }
+    }
+    
+    static func formattedFinishedDate(on date: Date?) -> String {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .long
+        return formatter.string(from: date ?? Date())
     }
     
     func deleteBooks(at offsets: IndexSet) {

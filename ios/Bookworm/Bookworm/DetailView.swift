@@ -40,6 +40,8 @@ struct DetailView: View {
                 Text(self.book.review ?? "No review")
                     .padding()
                 
+                Text(Self.formattedFinishedDate(on: self.book.date))
+
                 RatingView(rating: .constant(Int(self.book.rating)))
                     .font(.largeTitle)
                 
@@ -57,6 +59,12 @@ struct DetailView: View {
             Image(systemName: "trash")
         })
         .navigationBarTitle(Text(book.title ?? "Unknown Title"), displayMode: .inline)
+    }
+    
+    static func formattedFinishedDate(on date: Date?) -> String {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .long
+        return formatter.string(from: date ?? Date())
     }
     
     func deleteBook() {
