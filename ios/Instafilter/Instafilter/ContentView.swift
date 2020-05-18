@@ -32,54 +32,59 @@ struct ContentView: View {
             }
         )
         
-        return NavigationView {
-            VStack {
-                ZStack {
-                    Rectangle().fill(Color.secondary)
-                    
-                    if image != nil{
-                        image?.resizable().scaledToFit()
-                    } else {
-                        Text("Tap to select a picture")
-                            .foregroundColor(.white)
-                            .font(.headline)
+        return GeometryReader { geo in
+            NavigationView {
+                VStack {
+                    ZStack {
+                        Rectangle()
+                            .fill(Color.secondary)
+
+                        if self.image != nil{
+                            self.image?.resizable().scaledToFit()
+                        } else {
+                            Text("Tap to select a picture")
+                                .foregroundColor(.white)
+                                .font(.headline)
+                        }
                     }
-                }
-                .onTapGesture {
-                    self.showingImagePicker = true
-                }
-                
-                HStack {
-                    Text("Intensity")
-                    Slider(value: intensity)
-                }.padding(.vertical)
-                
-                HStack {
-                    Button("Change Filter") {
-                        self.showingFilterSheet = true
+                    .frame(width: geo.size.width)
+                    .onTapGesture {
+                        self.showingImagePicker = true
                     }
                     
-                    Spacer()
+                    HStack {
+                        Text("Intensity")
+                        Slider(value: intensity)
+                    }.padding()
                     
-                    Button("Save") {
-                        guard let processedImage = self.processedImage else { return }
-                        
-                        let imageSaver = ImageSaver()
-                        
-                        imageSaver.successHandler = {
-                            print("Success!")
+                    HStack {
+                        Button("Change Filter") {
+                            self.showingFilterSheet = true
                         }
                         
-                        imageSaver.errorHandler = {
-                            print("Oops: \($0.localizedDescription)")
-                        }
+                        Spacer()
                         
-                        imageSaver.writeToPhotoAlbum(image: processedImage)
+                        Button("Save") {
+                            guard let processedImage = self.processedImage else { return }
+                            
+                            let imageSaver = ImageSaver()
+                            
+                            imageSaver.successHandler = {
+                                print("Success!")
+                            }
+                            
+                            imageSaver.errorHandler = {
+                                print("Oops: \($0.localizedDescription)")
+                            }
+                            
+                            imageSaver.writeToPhotoAlbum(image: processedImage)
+                        }
                     }
+                    .padding([.horizontal])
                 }
+                .padding([.bottom])
+                .navigationBarTitle("Instafilter")
             }
-            .padding([.horizontal, .bottom])
-            .navigationBarTitle("Instafilter")
         }
         .sheet(isPresented: $showingImagePicker, onDismiss: loadImage) {
             ImagePicker(image: self.$inputImage)
