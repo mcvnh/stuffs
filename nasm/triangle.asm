@@ -1,6 +1,6 @@
 ; --------------------------------------------------------------------------------
 ; This is an OSX console program that writes a little triangle of asterisks to
-; standard output. Runs on macOS only>
+; standard output. Runs on macOS only
 ;
 ; To run the application:
 ;
