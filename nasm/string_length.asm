@@ -22,9 +22,8 @@ counter:
 done:
           sub       rax, rbx                ; rax <- rbx - rax, rax now store the length of the message
 
-          mov       rdx, rax                ; move length of the message to rdx
-
 write:
+          mov       rdx, rax                ; move length of the message to rdx
           mov       rax, 0x02000004         ; system call for write
           mov       rdi, 1                  ; file handle 1 is stdout
           mov       rsi, message            ; address of string to output
