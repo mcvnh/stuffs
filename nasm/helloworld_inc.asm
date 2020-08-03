@@ -6,12 +6,13 @@
 ;    nasm -fmacho64 helloworld_inc.asm && gcc helloworld_inc.o && ./a.out
 ; --------------------------------------------------------------------------------
 
+; - Includes
+
 %include            'functions.asm'
 
+; - Code
 
           global    _main
-
-
           section   .text
 _main:
           mov       rax, msg1
@@ -21,6 +22,7 @@ _main:
           call      sprint
 
           call      exit
+
 
           section   .data
 msg1      db        'Hello, brave new world', 10, 0
