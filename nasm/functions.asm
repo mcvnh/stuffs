@@ -52,6 +52,24 @@ sprint:
 
 
 ; --------------------------------------------------------------------------------
+; int sprint(message)
+;
+; given a string and print it to the stdout device with line feed function
+; --------------------------------------------------------------------------------
+
+sprintlf:
+          call      sprint             ; print out the message
+          push      rax                ; push rax onto the stack to preserve
+          mov       rax, 10            ; move line feed character into rax
+          push      rax                ; push linefeed onto the stack so we can get the address
+          mov       rax, rsp           ; move the address of current stack pointer into rax
+          call      sprint             ; print out the linefeed
+          pop       rax                ; remove our linefeed character from stack to rax
+          pop       rax                ; restore the original value of rax
+          ret                          ; exit function
+
+
+; --------------------------------------------------------------------------------
 ; void exit()
 ;
 ; exit program and restore resources
